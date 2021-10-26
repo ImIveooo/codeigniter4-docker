@@ -13,7 +13,7 @@ networks:
 services:
     # codeigniter.
     codeigniter4:
-        image: codeigniter:test
+        image: imiveooo/codeigniter:latest
         container_name: codeigniter4
         ports:
           - "80:80"
