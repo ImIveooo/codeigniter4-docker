@@ -1,54 +1,65 @@
 version: "3"
 
+# Improvement of the docker compose.
+# Author : ImIveooo_
+# Date : 10/26/2021
+# Original project : https://github.com/atsanna/codeigniter4-docker
+
+# Network creation.
+networks:
+  codeigniter:
+    external: false
+
 services:
-#--------------------------------------------------------------------------#
-#--------------------------------------------------------------------------#
-#                     C O D E I G N I T E R  v4.1.4                        #
-#--------------------------------------------------------------------------#
-#--------------------------------------------------------------------------#
+    # codeigniter.
     codeigniter4:
-        image: atsanna/codeigniter4:latest
-        container_name: 'codeigniter4'
+        image: codeigniter:test
+        container_name: codeigniter4
         ports:
-          - 80:80
+          - "80:80"
         links:
+          - ${DB_HOST}
+        depends_on:
           - codeigniter4_mysql
         volumes:
-          - ./localfolder/www:/var/www/html
+          - ./codeigniter/www:/var/www/html
+        restart: always
+        networks:
+        - codeigniter
 
-#--------------------------------------------------------------------------#
-#--------------------------------------------------------------------------#
-#                               M Y S Q L                                  #
-#--------------------------------------------------------------------------#
-#--------------------------------------------------------------------------#               
+    #mysql.
     codeigniter4_mysql:
-        image: mariadb:10.5.5
-        container_name: 'codeigniter4_mysql'
+        image: mariadb
+        container_name: codeigniter4_mysql
         ports:
-          - 3306:3306
+          - "3306:3306"
         volumes:
-          - ./localfolder/mysql:/var/lib/mysql
-          - ./localfolder/logs/mysql:/var/log/mysql
+          - ./codeigniter/mysql:/var/lib/mysql
+          - ./codeigniter/logs/mysql:/var/log/mysql
         environment:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: codeigniter4
-          MYSQL_USER: codeigniter4
-          MYSQL_PASSWORD: codeigniter4
+          - MYSQL_ROOT_PASSWORD=rootpassword
+          - MYSQL_USER= ${DB_USER}
+          - MYSQL_PASSWORD= ${DB_PASSWORD}
+          - MYSQL_DATABASE= ${DB_DATABASE}
+        restart: always
+        networks:
+        - codeigniter
 
-#--------------------------------------------------------------------------#
-#--------------------------------------------------------------------------#
-#                         P H P M Y A D M I N                              #
-#--------------------------------------------------------------------------#
-#--------------------------------------------------------------------------#             
+    # phpmyadmin.    
     codeigniter4_phpmyadmin:
-        image: phpmyadmin/phpmyadmin:5.0.2
-        container_name: 'codeigniter4_phpmyadmin'
+        image: phpmyadmin/phpmyadmin:latest
+        container_name: codeigniter4_phpmyadmin
         links:
+          - ${DB_HOST}
+        depends_on:
           - codeigniter4_mysql
         environment:
-          PMA_HOST: codeigniter4_mysql
+          PMA_HOST: ${DB_HOST}
           PMA_PORT: 3306
         ports:
-          - 81:80
+          - "81:80"
         volumes:
-          - ./localfolder/sessions:/sessions
+          - ./codeigniter/sessions:/sessions
+        restart: always
+        networks:
+        - codeigniter

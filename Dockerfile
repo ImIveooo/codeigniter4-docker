@@ -1,3 +1,8 @@
+# Improvement of the dockerfile.
+# Author : ImIveooo_
+# Date : 10/26/2021
+# Original project : https://github.com/atsanna/codeigniter4-docker
+
 FROM php:7.3-apache
 
 LABEL maintainer="Antonio Sanna <atsanna@tiscali.it>"
@@ -44,7 +49,11 @@ RUN chmod +x /startScript.sh
 
 RUN cd /var/www/html
 
-RUN composer create-project codeigniter4/appstarter codeigniter4 v4.1.4
+# Creation of the codeigniter project and addition of languages.
+RUN composer create-project codeigniter4/appstarter codeigniter4 v4.1.4 \
+    && cd /var/www/html/codeigniter4 \
+    && composer require codeigniter4/translations
+
 RUN chmod -R 0777 /var/www/html/codeigniter4/writable
 
 RUN mv codeigniter4 /
