@@ -1,0 +1,65 @@
+version: "3"
+
+# Improvement of the docker compose.
+# Author : ImIveooo_
+# Date : 10/26/2021
+# Original project : https://github.com/atsanna/codeigniter4-docker
+
+# Network creation.
+networks:
+  codeigniter:
+    external: false
+
+services:
+    # codeigniter.
+    codeigniter4:
+        image: imiveooo/codeigniter:latest-arm
+        container_name: codeigniter4
+        ports:
+          - "80:80"
+        links:
+          - ${DB_HOST}
+        depends_on:
+          - codeigniter4_mysql
+        volumes:
+          - ./codeigniter/www:/var/www/html
+        restart: always
+        networks:
+        - codeigniter
+
+    #mysql.
+    codeigniter4_mysql:
+        image: mariadb
+        container_name: codeigniter4_mysql
+        ports:
+          - "3306:3306"
+        volumes:
+          - ./codeigniter/mysql:/var/lib/mysql
+          - ./codeigniter/logs/mysql:/var/log/mysql
+        environment:
+          - MYSQL_ROOT_PASSWORD=rootpassword
+          - MYSQL_USER= ${DB_USER}
+          - MYSQL_PASSWORD= ${DB_PASSWORD}
+          - MYSQL_DATABASE= ${DB_DATABASE}
+        restart: always
+        networks:
+        - codeigniter
+
+    # phpmyadmin.    
+    codeigniter4_phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        container_name: codeigniter4_phpmyadmin
+        links:
+          - ${DB_HOST}
+        depends_on:
+          - codeigniter4_mysql
+        environment:
+          PMA_HOST: ${DB_HOST}
+          PMA_PORT: 3306
+        ports:
+          - "81:80"
+        volumes:
+          - ./codeigniter/sessions:/sessions
+        restart: always
+        networks:
+        - codeigniter
