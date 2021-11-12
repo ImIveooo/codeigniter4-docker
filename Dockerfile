@@ -50,7 +50,7 @@ RUN chmod +x /startScript.sh
 RUN cd /var/www/html
 
 # Creation of the codeigniter project and addition of languages.
-RUN composer create-project codeigniter4/appstarter codeigniter4 v4.1.4 \
+RUN composer create-project codeigniter4/appstarter codeigniter4 v4.1.5 \
     && cd /var/www/html/codeigniter4 \
     && composer require codeigniter4/translations
 
