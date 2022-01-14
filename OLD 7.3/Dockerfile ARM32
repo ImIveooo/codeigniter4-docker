@@ -3,7 +3,7 @@
 # Date : 10/26/2021
 # Original project : https://github.com/atsanna/codeigniter4-docker
 
-FROM php:7.4-apache
+FROM php:7.3-apache
 
 LABEL maintainer="Antonio Sanna <atsanna@tiscali.it>"
 

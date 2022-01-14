@@ -3,7 +3,7 @@
 # Date : 10/26/2021
 # Original project : https://github.com/atsanna/codeigniter4-docker
 
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 LABEL maintainer="Antonio Sanna <atsanna@tiscali.it>"
 
@@ -50,7 +50,7 @@ RUN chmod +x /startScript.sh
 RUN cd /var/www/html
 
 # Creation of the codeigniter project and addition of languages.
-RUN composer create-project codeigniter4/appstarter codeigniter4 v4.1.5 \
+RUN composer create-project codeigniter4/appstarter codeigniter4 v4.1.7 \
     && cd /var/www/html/codeigniter4 \
     && composer require codeigniter4/translations
 
